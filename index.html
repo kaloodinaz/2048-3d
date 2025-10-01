@@ -1,0 +1,604 @@
+  <meta charset="utf-8">
+   <link rel="manifest" href="/manifest.json" />
+<link rel="shortcut icon" href="https://kaloodinaz.github.io/2048-3d/favicon.ico">
+<meta name="theme-color" content="#151515" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048 3D | Play Online</title>
+<meta name="description" content="Play 2048 3D online for a new twist on the classic puzzle game. Merge cubes in three dimensions, challenge your brain, and reach the ultimate 2048 block">
+  <link rel="apple-touch-icon" href="https://kaloodinaz.github.io/2048-reverse/apple-touch-icon.png">
+  <link rel="apple-touch-startup-image" href="https://kaloodinaz.github.io/2048-reverse/apple-touch-startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone 5+ -->
+  <link rel="apple-touch-startup-image" href="https://kaloodinaz.github.io/2048-reverse/apple-touch-startup-image-640x920.png"  media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone, retina -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+<meta property="og:title" content="2048 3D game"/>
+  <meta property="og:site_name" content="kaloodinaz" />
+  <meta property="og:description" content="Enjoy 2048 3D, the addictive puzzle game with a 3D cube twist. Slide, merge, and strategize your moves to reach the 2048 block in stunning 3D"/>
+  <meta property="og:image" content="https://kaloodinaz.github.io/2048-3d/og-image.jpg"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+html,body{margin:0;padding:0;background:#f1f1f1;color:#776e65;font-family:"Poppins","Helvetica Neue",Arial,sans-serif;font-size:18px}
+body{margin:20px 0}
+.heading:after{content:"";display:block;clear:both}
+h1.title{font-size:38px;font-weight:700;margin:0;display:block;float:left}
+@-webkit-keyframes move-up {
+0%{top:25px;opacity:1}
+100%{top:-50px;opacity:0}
+}
+@-moz-keyframes move-up {
+0%{top:25px;opacity:1}
+100%{top:-50px;opacity:0}
+}
+@keyframes move-up {
+0%{top:25px;opacity:1}
+100%{top:-50px;opacity:0}
+}
+.scores-container{float:right;text-align:right}
+.score-container,.best-container{position:relative;display:inline-block;background:#8f7a66;padding:15px 25px;font-size:25px;height:25px;line-height:47px;font-weight:700;border-radius:3px;color:#fff;margin-top:8px;text-align:center}
+.score-container:after,.best-container:after{position:absolute;width:100%;top:10px;left:0;text-transform:uppercase;font-size:13px;line-height:13px;text-align:center;color:#eee4da}
+.score-container .score-addition,.best-container .score-addition{position:absolute;right:30px;color:red;font-size:25px;line-height:25px;font-weight:700;color:#776e65e6;z-index:100;-webkit-animation:move-up 600ms ease-in;-moz-animation:move-up 600ms ease-in;animation:move-up 600ms ease-in;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;animation-fill-mode:both}
+.score-container:after{content:"Score"}
+.best-container:after{content:"Best"}
+p{margin-top:0;margin-bottom:10px;line-height:1.65}
+a{color:#776e65;font-weight:700;text-decoration:underline;cursor:pointer}
+strong.important{text-transform:uppercase}
+hr{border:none;border-bottom:1px solid #d8d4d0;margin-top:20px;margin-bottom:30px}
+.container{width:480px;margin:0 auto}
+@-webkit-keyframes fade-in {
+0%{opacity:0}
+100%{opacity:1}
+}
+@-moz-keyframes fade-in {
+0%{opacity:0}
+100%{opacity:1}
+}
+@keyframes fade-in {
+0%{opacity:0}
+100%{opacity:1}
+}
+.game-container{margin-top:40px;position:relative;padding:15px;cursor:default;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;width:480px;height:620px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+.game-container .game-message{display:none;position:fixed;top:0;right:0;bottom:0;left:0;background:#eee4da80;z-index:100;text-align:center;-webkit-animation:fade-in 800ms ease 1200ms;-moz-animation:fade-in 800ms ease 1200ms;animation:fade-in 800ms ease 1200ms;-webkit-animation-fill-mode:both;-moz-animation-fill-mode:both;animation-fill-mode:both}
+.game-container .game-message p{font-size:60px;font-weight:700;height:60px;line-height:60px;margin-top:222px}
+.game-container .game-message .lower{display:block;margin-top:59px}
+.game-container .game-message a{display:inline-block;background:#8f7a66;border-radius:3px;padding:0 20px;text-decoration:none;color:#f9f6f2;height:40px;line-height:42px;margin-left:9px}
+.game-container .game-message a.keep-playing-button{display:none}
+.game-container .game-message #alipay{margin-top:10px}
+.game-container .game-message #alipay a{background:none;padding:0;margin:0}
+.game-container .game-message.game-won{background:#edc22e80;color:#f9f6f2}
+.game-container .game-message.game-won a.keep-playing-button{display:inline-block}
+.game-container .game-message.game-won,.game-container .game-message.game-over{display:block}
+.grid-container{position:absolute;width:480px;height:480px;z-index:1;-webkit-perspective:2000px;-moz-perspective:2000px;-ms-perspective:2000px;perspective:2000px}
+.grid-inner{position:relative;width:80px;height:80px;margin:200px;-webkit-transform:rotateX(-18deg) rotateY(15deg);-moz-transform:rotateX(-18deg) rotateY(15deg);-ms-transform:rotateX(-18deg) rotateY(15deg);-o-transform:rotateX(-18deg) rotateY(15deg);transform:rotateX(-18deg) rotateY(15deg);-webkit-perspective:7000px;-moz-perspective:7000px;-ms-perspective:7000px;perspective:7000px;-webkit-transform-style:preserve-3d;-moz-transform-style:preserve-3d;-ms-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-perspective-origin:50% 50%;-moz-perspective-origin:50% 50%;-ms-perspective-origin:50% 50%;perspective-origin:50% 50%;-webkit-transition:-webkit-transform 100ms ease-in-out;-moz-transition:-moz-transform 100ms ease-in-out;transition:transform 100ms ease-in-out}
+.rotated .grid-inner{-webkit-transform:rotateX(-18deg) rotateY(105deg);-moz-transform:rotateX(-18deg) rotateY(105deg);-ms-transform:rotateX(-18deg) rotateY(105deg);-o-transform:rotateX(-18deg) rotateY(105deg);transform:rotateX(-18deg) rotateY(105deg)}
+.tile-container{-webkit-transform-style:preserve-3d;-moz-transform-style:preserve-3d;-ms-transform-style:preserve-3d;transform-style:preserve-3d}
+.cube{position:absolute;width:80px;height:80px;-webkit-transform-style:preserve-3d;-moz-transform-style:preserve-3d;-ms-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-transform-origin:50% 50%;-moz-transform-origin:50% 50%;-ms-transform-origin:50% 50%;-o-transform-origin:50% 50%;transform-origin:50% 50%}
+.cube.hidden{opacity:.1}
+.cube-face{position:absolute;width:79px;height:79px;border:1px solid #0000008c;background:#eee4da26;-webkit-transform-origin:50% 50%;-moz-transform-origin:50% 50%;-ms-transform-origin:50% 50%;-o-transform-origin:50% 50%;transform-origin:50% 50%;-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden}
+.cube-face-u{-webkit-transform:rotateX(90deg) translateZ(40px);-moz-transform:rotateX(90deg) translateZ(40px);-ms-transform:rotateX(90deg) translateZ(40px);-o-transform:rotateX(90deg) translateZ(40px);transform:rotateX(90deg) translateZ(40px)}
+.cube-face-d{-webkit-transform:rotateX(-90deg) translateZ(40px);-moz-transform:rotateX(-90deg) translateZ(40px);-ms-transform:rotateX(-90deg) translateZ(40px);-o-transform:rotateX(-90deg) translateZ(40px);transform:rotateX(-90deg) translateZ(40px)}
+.cube-face-l{-webkit-transform:rotateY(-90deg) translateZ(40px);-moz-transform:rotateY(-90deg) translateZ(40px);-ms-transform:rotateY(-90deg) translateZ(40px);-o-transform:rotateY(-90deg) translateZ(40px);transform:rotateY(-90deg) translateZ(40px)}
+.cube-face-r{-webkit-transform:rotateY(90deg) translateZ(40px);-moz-transform:rotateY(90deg) translateZ(40px);-ms-transform:rotateY(90deg) translateZ(40px);-o-transform:rotateY(90deg) translateZ(40px);transform:rotateY(90deg) translateZ(40px)}
+.cube-face-f{-webkit-transform:translateZ(40px);-moz-transform:translateZ(40px);-ms-transform:translateZ(40px);-o-transform:translateZ(40px);transform:translateZ(40px)}
+.cube-face-b{-webkit-transform:rotateY(180deg) translateZ(40px);-moz-transform:rotateY(180deg) translateZ(40px);-ms-transform:rotateY(180deg) translateZ(40px);-o-transform:rotateY(180deg) translateZ(40px);transform:rotateY(180deg) translateZ(40px)}
+.cube-1-1-1{-webkit-transform:translateX(-200px) translateY(-200px) translateZ(-200px);-moz-transform:translateX(-200px) translateY(-200px) translateZ(-200px);-ms-transform:translateX(-200px) translateY(-200px) translateZ(-200px);-o-transform:translateX(-200px) translateY(-200px) translateZ(-200px);transform:translateX(-200px) translateY(-200px) translateZ(-200px)}
+.cube-1-1-2{-webkit-transform:translateX(-200px) translateY(-200px) translateZ(0px);-moz-transform:translateX(-200px) translateY(-200px) translateZ(0px);-ms-transform:translateX(-200px) translateY(-200px) translateZ(0px);-o-transform:translateX(-200px) translateY(-200px) translateZ(0px);transform:translateX(-200px) translateY(-200px) translateZ(0px)}
+.cube-1-1-3{-webkit-transform:translateX(-200px) translateY(-200px) translateZ(200px);-moz-transform:translateX(-200px) translateY(-200px) translateZ(200px);-ms-transform:translateX(-200px) translateY(-200px) translateZ(200px);-o-transform:translateX(-200px) translateY(-200px) translateZ(200px);transform:translateX(-200px) translateY(-200px) translateZ(200px)}
+.cube-1-2-1{-webkit-transform:translateX(-200px) translateY(0px) translateZ(-200px);-moz-transform:translateX(-200px) translateY(0px) translateZ(-200px);-ms-transform:translateX(-200px) translateY(0px) translateZ(-200px);-o-transform:translateX(-200px) translateY(0px) translateZ(-200px);transform:translateX(-200px) translateY(0px) translateZ(-200px)}
+.cube-1-2-2{-webkit-transform:translateX(-200px) translateY(0px) translateZ(0px);-moz-transform:translateX(-200px) translateY(0px) translateZ(0px);-ms-transform:translateX(-200px) translateY(0px) translateZ(0px);-o-transform:translateX(-200px) translateY(0px) translateZ(0px);transform:translateX(-200px) translateY(0px) translateZ(0px)}
+.cube-1-2-3{-webkit-transform:translateX(-200px) translateY(0px) translateZ(200px);-moz-transform:translateX(-200px) translateY(0px) translateZ(200px);-ms-transform:translateX(-200px) translateY(0px) translateZ(200px);-o-transform:translateX(-200px) translateY(0px) translateZ(200px);transform:translateX(-200px) translateY(0px) translateZ(200px)}
+.cube-1-3-1{-webkit-transform:translateX(-200px) translateY(200px) translateZ(-200px);-moz-transform:translateX(-200px) translateY(200px) translateZ(-200px);-ms-transform:translateX(-200px) translateY(200px) translateZ(-200px);-o-transform:translateX(-200px) translateY(200px) translateZ(-200px);transform:translateX(-200px) translateY(200px) translateZ(-200px)}
+.cube-1-3-2{-webkit-transform:translateX(-200px) translateY(200px) translateZ(0px);-moz-transform:translateX(-200px) translateY(200px) translateZ(0px);-ms-transform:translateX(-200px) translateY(200px) translateZ(0px);-o-transform:translateX(-200px) translateY(200px) translateZ(0px);transform:translateX(-200px) translateY(200px) translateZ(0px)}
+.cube-1-3-3{-webkit-transform:translateX(-200px) translateY(200px) translateZ(200px);-moz-transform:translateX(-200px) translateY(200px) translateZ(200px);-ms-transform:translateX(-200px) translateY(200px) translateZ(200px);-o-transform:translateX(-200px) translateY(200px) translateZ(200px);transform:translateX(-200px) translateY(200px) translateZ(200px)}
+.cube-2-1-1{-webkit-transform:translateX(0px) translateY(-200px) translateZ(-200px);-moz-transform:translateX(0px) translateY(-200px) translateZ(-200px);-ms-transform:translateX(0px) translateY(-200px) translateZ(-200px);-o-transform:translateX(0px) translateY(-200px) translateZ(-200px);transform:translateX(0px) translateY(-200px) translateZ(-200px)}
+.cube-2-1-2{-webkit-transform:translateX(0px) translateY(-200px) translateZ(0px);-moz-transform:translateX(0px) translateY(-200px) translateZ(0px);-ms-transform:translateX(0px) translateY(-200px) translateZ(0px);-o-transform:translateX(0px) translateY(-200px) translateZ(0px);transform:translateX(0px) translateY(-200px) translateZ(0px)}
+.cube-2-1-3{-webkit-transform:translateX(0px) translateY(-200px) translateZ(200px);-moz-transform:translateX(0px) translateY(-200px) translateZ(200px);-ms-transform:translateX(0px) translateY(-200px) translateZ(200px);-o-transform:translateX(0px) translateY(-200px) translateZ(200px);transform:translateX(0px) translateY(-200px) translateZ(200px)}
+.cube-2-2-1{-webkit-transform:translateX(0px) translateY(0px) translateZ(-200px);-moz-transform:translateX(0px) translateY(0px) translateZ(-200px);-ms-transform:translateX(0px) translateY(0px) translateZ(-200px);-o-transform:translateX(0px) translateY(0px) translateZ(-200px);transform:translateX(0px) translateY(0px) translateZ(-200px)}
+.cube-2-2-2{-webkit-transform:translateX(0px) translateY(0px) translateZ(0px);-moz-transform:translateX(0px) translateY(0px) translateZ(0px);-ms-transform:translateX(0px) translateY(0px) translateZ(0px);-o-transform:translateX(0px) translateY(0px) translateZ(0px);transform:translateX(0px) translateY(0px) translateZ(0px)}
+.cube-2-2-3{-webkit-transform:translateX(0px) translateY(0px) translateZ(200px);-moz-transform:translateX(0px) translateY(0px) translateZ(200px);-ms-transform:translateX(0px) translateY(0px) translateZ(200px);-o-transform:translateX(0px) translateY(0px) translateZ(200px);transform:translateX(0px) translateY(0px) translateZ(200px)}
+.cube-2-3-1{-webkit-transform:translateX(0px) translateY(200px) translateZ(-200px);-moz-transform:translateX(0px) translateY(200px) translateZ(-200px);-ms-transform:translateX(0px) translateY(200px) translateZ(-200px);-o-transform:translateX(0px) translateY(200px) translateZ(-200px);transform:translateX(0px) translateY(200px) translateZ(-200px)}
+.cube-2-3-2{-webkit-transform:translateX(0px) translateY(200px) translateZ(0px);-moz-transform:translateX(0px) translateY(200px) translateZ(0px);-ms-transform:translateX(0px) translateY(200px) translateZ(0px);-o-transform:translateX(0px) translateY(200px) translateZ(0px);transform:translateX(0px) translateY(200px) translateZ(0px)}
+.cube-2-3-3{-webkit-transform:translateX(0px) translateY(200px) translateZ(200px);-moz-transform:translateX(0px) translateY(200px) translateZ(200px);-ms-transform:translateX(0px) translateY(200px) translateZ(200px);-o-transform:translateX(0px) translateY(200px) translateZ(200px);transform:translateX(0px) translateY(200px) translateZ(200px)}
+.cube-3-1-1{-webkit-transform:translateX(200px) translateY(-200px) translateZ(-200px);-moz-transform:translateX(200px) translateY(-200px) translateZ(-200px);-ms-transform:translateX(200px) translateY(-200px) translateZ(-200px);-o-transform:translateX(200px) translateY(-200px) translateZ(-200px);transform:translateX(200px) translateY(-200px) translateZ(-200px)}
+.cube-3-1-2{-webkit-transform:translateX(200px) translateY(-200px) translateZ(0px);-moz-transform:translateX(200px) translateY(-200px) translateZ(0px);-ms-transform:translateX(200px) translateY(-200px) translateZ(0px);-o-transform:translateX(200px) translateY(-200px) translateZ(0px);transform:translateX(200px) translateY(-200px) translateZ(0px)}
+.cube-3-1-3{-webkit-transform:translateX(200px) translateY(-200px) translateZ(200px);-moz-transform:translateX(200px) translateY(-200px) translateZ(200px);-ms-transform:translateX(200px) translateY(-200px) translateZ(200px);-o-transform:translateX(200px) translateY(-200px) translateZ(200px);transform:translateX(200px) translateY(-200px) translateZ(200px)}
+.cube-3-2-1{-webkit-transform:translateX(200px) translateY(0px) translateZ(-200px);-moz-transform:translateX(200px) translateY(0px) translateZ(-200px);-ms-transform:translateX(200px) translateY(0px) translateZ(-200px);-o-transform:translateX(200px) translateY(0px) translateZ(-200px);transform:translateX(200px) translateY(0px) translateZ(-200px)}
+.cube-3-2-2{-webkit-transform:translateX(200px) translateY(0px) translateZ(0px);-moz-transform:translateX(200px) translateY(0px) translateZ(0px);-ms-transform:translateX(200px) translateY(0px) translateZ(0px);-o-transform:translateX(200px) translateY(0px) translateZ(0px);transform:translateX(200px) translateY(0px) translateZ(0px)}
+.cube-3-2-3{-webkit-transform:translateX(200px) translateY(0px) translateZ(200px);-moz-transform:translateX(200px) translateY(0px) translateZ(200px);-ms-transform:translateX(200px) translateY(0px) translateZ(200px);-o-transform:translateX(200px) translateY(0px) translateZ(200px);transform:translateX(200px) translateY(0px) translateZ(200px)}
+.cube-3-3-1{-webkit-transform:translateX(200px) translateY(200px) translateZ(-200px);-moz-transform:translateX(200px) translateY(200px) translateZ(-200px);-ms-transform:translateX(200px) translateY(200px) translateZ(-200px);-o-transform:translateX(200px) translateY(200px) translateZ(-200px);transform:translateX(200px) translateY(200px) translateZ(-200px)}
+.cube-3-3-2{-webkit-transform:translateX(200px) translateY(200px) translateZ(0px);-moz-transform:translateX(200px) translateY(200px) translateZ(0px);-ms-transform:translateX(200px) translateY(200px) translateZ(0px);-o-transform:translateX(200px) translateY(200px) translateZ(0px);transform:translateX(200px) translateY(200px) translateZ(0px)}
+.cube-3-3-3{-webkit-transform:translateX(200px) translateY(200px) translateZ(200px);-moz-transform:translateX(200px) translateY(200px) translateZ(200px);-ms-transform:translateX(200px) translateY(200px) translateZ(200px);-o-transform:translateX(200px) translateY(200px) translateZ(200px);transform:translateX(200px) translateY(200px) translateZ(200px)}
+.tile{line-height:90px;position:absolute;-webkit-transition:-webkit-transform 100ms ease-in-out;-moz-transition:-moz-transform 100ms ease-in-out;transition:transform 100ms ease-in-out}
+.tile.tile-bonused{display:none}
+.tile.z-1{z-index:1}
+.tile.z-2{z-index:2}
+.tile.z-3{z-index:3}
+.rotated .tile.x-1{z-index:3}
+.rotated .tile.x-2{z-index:2}
+.rotated .tile.x-3{z-index:1}
+.tile .cube-face{background:#eee4da;text-align:center;font-weight:700;font-size:55px}
+.tile.tile-bonus .cube-face{background:#776e65;color:#eee4da}
+.tile.tile-2 .cube-face{background:#eee4da}
+.tile.tile-bonus.tile-2 .cube-face{background:#776e65;color:#eee4da}
+.tile.tile-4 .cube-face{background:#ede0c8}
+.tile.tile-bonus.tile-4 .cube-face{background:#776e65;color:#ede0c8}
+.tile.tile-8 .cube-face{color:#f9f6f2;background:#f2b179}
+.tile.tile-bonus.tile-8 .cube-face{background:#f9f6f2;color:#f2b179}
+.tile.tile-16 .cube-face{color:#f9f6f2;background:#f59563}
+.tile.tile-bonus.tile-16 .cube-face{background:#f9f6f2;color:#f59563}
+.tile.tile-32 .cube-face{color:#f9f6f2;background:#f67c5f}
+.tile.tile-bonus.tile-32 .cube-face{background:#f9f6f2;color:#f67c5f}
+.tile.tile-64 .cube-face{color:#f9f6f2;background:#f65e3b}
+.tile.tile-bonus.tile-64 .cube-face{background:#f9f6f2;color:#f65e3b}
+.tile.tile-128 .cube-face{color:#f9f6f2;background:#edcf72;font-size:45px;box-shadow:0 0 30px 10px #f3d7743d inset 0 0 0 1px #ffffff24}
+.tile.tile-bonus.tile-128 .cube-face{background:#f9f6f2;color:#edcf72}
+@media screen and (max-width: 520px) {
+.tile.tile-128 .cube-face{font-size:15px}
+}
+.tile.tile-256 .cube-face{color:#f9f6f2;background:#edcc61;font-size:45px;box-shadow:0 0 30px 10px #f3d77451 inset 0 0 0 1px #ffffff31}
+.tile.tile-bonus.tile-256 .cube-face{background:#f9f6f2;color:#edcc61}
+@media screen and (max-width: 520px) {
+.tile.tile-256 .cube-face{font-size:15px}
+}
+.tile.tile-512 .cube-face{color:#f9f6f2;background:#edc850;font-size:45px;box-shadow:0 0 30px 10px #f3d77465 inset 0 0 0 1px #ffffff3d}
+.tile.tile-bonus.tile-512 .cube-face{background:#f9f6f2;color:#edc850}
+@media screen and (max-width: 520px) {
+.tile.tile-512 .cube-face{font-size:15px}
+}
+.tile.tile-1024 .cube-face{color:#f9f6f2;background:#edc53f;font-size:28px;box-shadow:0 0 30px 10px #f3d77479 inset 0 0 0 1px #ffffff49}
+.tile.tile-bonus.tile-1024 .cube-face{background:#f9f6f2;color:#edc53f}
+@media screen and (max-width: 520px) {
+.tile.tile-1024 .cube-face{font-size:13px}
+}
+.tile.tile-2048 .cube-face{color:#f9f6f2;background:#edc22e;font-size:28px;box-shadow:0 0 30px 10px #f3d7748e inset 0 0 0 1px #fff5}
+.tile.tile-bonus.tile-2048 .cube-face{background:#f9f6f2;color:#edc22e}
+@media screen and (max-width: 520px) {
+.tile.tile-2048 .cube-face{font-size:13px}
+}
+.tile.tile-super .cube-face{color:#f9f6f2;background:#3c3a32;font-size:20px}
+.tile.tile-bonus.tile-super .cube-face{background:#f9f6f2;color:#3c3a32}
+@media screen and (max-width: 520px) {
+.tile.tile-super .cube-face{font-size:10px}
+}
+@-webkit-keyframes appear {
+0%{opacity:0;-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+100%{opacity:1;-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+}
+@-moz-keyframes appear {
+0%{opacity:0;-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+100%{opacity:1;-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+}
+@keyframes appear {
+0%{opacity:0;-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+100%{opacity:1;-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+}
+@-webkit-keyframes pop {
+0%{-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+50%{-webkit-transform:scale3d(1.2,1.2,1.2);-moz-transform:scale3d(1.2,1.2,1.2);transform:scale3d(1.2,1.2,1.2)}
+100%{-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+}
+@-moz-keyframes pop {
+0%{-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+50%{-webkit-transform:scale3d(1.2,1.2,1.2);-moz-transform:scale3d(1.2,1.2,1.2);transform:scale3d(1.2,1.2,1.2)}
+100%{-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+}
+@keyframes pop {
+0%{-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+50%{-webkit-transform:scale3d(1.2,1.2,1.2);-moz-transform:scale3d(1.2,1.2,1.2);transform:scale3d(1.2,1.2,1.2)}
+100%{-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+}
+@-webkit-keyframes bonused {
+0%{-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+100%{-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+}
+@-moz-keyframes bonused {
+0%{-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+100%{-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+}
+@keyframes bonused {
+0%{-webkit-transform:scale3d(1,1,1);-moz-transform:scale3d(1,1,1);transform:scale3d(1,1,1)}
+100%{-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0)}
+}
+.tile-new{-webkit-animation:appear 400ms ease 100ms;-moz-animation:appear 400ms ease 100ms;animation:appear 400ms ease 100ms}
+.tile-merged{-webkit-animation:pop 400ms ease 100ms;-moz-animation:pop 400ms ease 100ms;animation:pop 400ms ease 100ms}
+.tile-bonus .tile-useless{-webkit-transform:scale3d(0,0,0);-moz-transform:scale3d(0,0,0);transform:scale3d(0,0,0);-webkit-animation:bonused 400ms ease 100ms;-moz-animation:bonused 400ms ease 100ms;animation:bonused 400ms ease 100ms}
+.tile > div,.tile-merged,.tile-new,.tile-bonus .tile-useless{height:100%;width:100%;-webkit-animation-fill-mode:backwards;-moz-animation-fill-mode:backwards;animation-fill-mode:backwards;-webkit-transform-style:preserve-3d;-moz-transform-style:preserve-3d;-ms-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-transform-origin:50% 50%;-moz-transform-origin:50% 50%;-ms-transform-origin:50% 50%;-o-transform-origin:50% 50%;transform-origin:50% 50%}
+.touch-buttons{display:none;height:90px;line-height:40px;text-align:center}
+.touch-buttons.show{display:block}
+.button-group{margin-top:10px;display:-webkit-box;display:-moz-box;display:-o-box;display:-ms-box;display:box}
+.touch-button{-webkit-box-flex:1;-moz-box-flex:1;-o-box-flex:1;-ms-box-flex:1;box-flex:1;height:100%;width:100px;background:#8f7a66;border-radius:3px;margin:0 10px;color:#f9f6f2}
+.game-intro{margin-bottom:0}
+.game-explanation{margin-top:30px}
+@media screen and (max-width: 520px) {
+html,body{font-size:15px}
+body{margin:20px 0;padding:0 20px}
+h1.title{font-size:27px;margin-top:15px;float:left}
+.container{width:270px}
+.score-container,.best-container{margin-top:0;padding:15px 10px;min-width:40px}
+.score-container .score-addition,.best-container .score-addition{display:none;-webkit-animation:none;-moz-animation:none;animation:none}
+.heading{margin-bottom:10px}
+.game-container{margin-top:0;padding:20px 0 0;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;width:270px;height:320px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+.game-container .game-message p{font-size:60px;font-weight:700;height:60px;line-height:60px;margin-top:222px}
+.game-container .game-message .lower{margin-top:59px}
+.game-container .game-message a{border-radius:3px;padding:0 20px;height:40px;line-height:42px;margin-left:9px}
+.grid-container{width:270px;height:270px}
+.grid-inner{height:40px;width:40px;margin:115px}
+.cube.hidden{opacity:1;visibility:hidden}
+.tile{line-height:42px}
+.tile .cube-face{font-size:20px;box-shadow:none!important}
+.cube{width:40px;height:40px}
+.cube-face{width:39px;height:39px}
+.cube-face-u{-webkit-transform:rotateX(90deg) translateZ(20px);-moz-transform:rotateX(90deg) translateZ(20px);-ms-transform:rotateX(90deg) translateZ(20px);-o-transform:rotateX(90deg) translateZ(20px);transform:rotateX(90deg) translateZ(20px)}
+.cube-face-d{-webkit-transform:rotateX(-90deg) translateZ(20px);-moz-transform:rotateX(-90deg) translateZ(20px);-ms-transform:rotateX(-90deg) translateZ(20px);-o-transform:rotateX(-90deg) translateZ(20px);transform:rotateX(-90deg) translateZ(20px)}
+.cube-face-l{-webkit-transform:rotateY(-90deg) translateZ(20px);-moz-transform:rotateY(-90deg) translateZ(20px);-ms-transform:rotateY(-90deg) translateZ(20px);-o-transform:rotateY(-90deg) translateZ(20px);transform:rotateY(-90deg) translateZ(20px)}
+.cube-face-r{-webkit-transform:rotateY(90deg) translateZ(20px);-moz-transform:rotateY(90deg) translateZ(20px);-ms-transform:rotateY(90deg) translateZ(20px);-o-transform:rotateY(90deg) translateZ(20px);transform:rotateY(90deg) translateZ(20px)}
+.cube-face-f{-webkit-transform:translateZ(20px);-moz-transform:translateZ(20px);-ms-transform:translateZ(20px);-o-transform:translateZ(20px);transform:translateZ(20px)}
+.cube-face-b{-webkit-transform:rotateY(180deg) translateZ(20px);-moz-transform:rotateY(180deg) translateZ(20px);-ms-transform:rotateY(180deg) translateZ(20px);-o-transform:rotateY(180deg) translateZ(20px);transform:rotateY(180deg) translateZ(20px)}
+.cube-1-1-1{-webkit-transform:translateX(-80px) translateY(-80px) translateZ(-80px);-moz-transform:translateX(-80px) translateY(-80px) translateZ(-80px);-ms-transform:translateX(-80px) translateY(-80px) translateZ(-80px);-o-transform:translateX(-80px) translateY(-80px) translateZ(-80px);transform:translateX(-80px) translateY(-80px) translateZ(-80px)}
+.cube-1-1-2{-webkit-transform:translateX(-80px) translateY(-80px) translateZ(0px);-moz-transform:translateX(-80px) translateY(-80px) translateZ(0px);-ms-transform:translateX(-80px) translateY(-80px) translateZ(0px);-o-transform:translateX(-80px) translateY(-80px) translateZ(0px);transform:translateX(-80px) translateY(-80px) translateZ(0px)}
+.cube-1-1-3{-webkit-transform:translateX(-80px) translateY(-80px) translateZ(80px);-moz-transform:translateX(-80px) translateY(-80px) translateZ(80px);-ms-transform:translateX(-80px) translateY(-80px) translateZ(80px);-o-transform:translateX(-80px) translateY(-80px) translateZ(80px);transform:translateX(-80px) translateY(-80px) translateZ(80px)}
+.cube-1-2-1{-webkit-transform:translateX(-80px) translateY(0px) translateZ(-80px);-moz-transform:translateX(-80px) translateY(0px) translateZ(-80px);-ms-transform:translateX(-80px) translateY(0px) translateZ(-80px);-o-transform:translateX(-80px) translateY(0px) translateZ(-80px);transform:translateX(-80px) translateY(0px) translateZ(-80px)}
+.cube-1-2-2{-webkit-transform:translateX(-80px) translateY(0px) translateZ(0px);-moz-transform:translateX(-80px) translateY(0px) translateZ(0px);-ms-transform:translateX(-80px) translateY(0px) translateZ(0px);-o-transform:translateX(-80px) translateY(0px) translateZ(0px);transform:translateX(-80px) translateY(0px) translateZ(0px)}
+.cube-1-2-3{-webkit-transform:translateX(-80px) translateY(0px) translateZ(80px);-moz-transform:translateX(-80px) translateY(0px) translateZ(80px);-ms-transform:translateX(-80px) translateY(0px) translateZ(80px);-o-transform:translateX(-80px) translateY(0px) translateZ(80px);transform:translateX(-80px) translateY(0px) translateZ(80px)}
+.cube-1-3-1{-webkit-transform:translateX(-80px) translateY(80px) translateZ(-80px);-moz-transform:translateX(-80px) translateY(80px) translateZ(-80px);-ms-transform:translateX(-80px) translateY(80px) translateZ(-80px);-o-transform:translateX(-80px) translateY(80px) translateZ(-80px);transform:translateX(-80px) translateY(80px) translateZ(-80px)}
+.cube-1-3-2{-webkit-transform:translateX(-80px) translateY(80px) translateZ(0px);-moz-transform:translateX(-80px) translateY(80px) translateZ(0px);-ms-transform:translateX(-80px) translateY(80px) translateZ(0px);-o-transform:translateX(-80px) translateY(80px) translateZ(0px);transform:translateX(-80px) translateY(80px) translateZ(0px)}
+.cube-1-3-3{-webkit-transform:translateX(-80px) translateY(80px) translateZ(80px);-moz-transform:translateX(-80px) translateY(80px) translateZ(80px);-ms-transform:translateX(-80px) translateY(80px) translateZ(80px);-o-transform:translateX(-80px) translateY(80px) translateZ(80px);transform:translateX(-80px) translateY(80px) translateZ(80px)}
+.cube-2-1-1{-webkit-transform:translateX(0px) translateY(-80px) translateZ(-80px);-moz-transform:translateX(0px) translateY(-80px) translateZ(-80px);-ms-transform:translateX(0px) translateY(-80px) translateZ(-80px);-o-transform:translateX(0px) translateY(-80px) translateZ(-80px);transform:translateX(0px) translateY(-80px) translateZ(-80px)}
+.cube-2-1-2{-webkit-transform:translateX(0px) translateY(-80px) translateZ(0px);-moz-transform:translateX(0px) translateY(-80px) translateZ(0px);-ms-transform:translateX(0px) translateY(-80px) translateZ(0px);-o-transform:translateX(0px) translateY(-80px) translateZ(0px);transform:translateX(0px) translateY(-80px) translateZ(0px)}
+.cube-2-1-3{-webkit-transform:translateX(0px) translateY(-80px) translateZ(80px);-moz-transform:translateX(0px) translateY(-80px) translateZ(80px);-ms-transform:translateX(0px) translateY(-80px) translateZ(80px);-o-transform:translateX(0px) translateY(-80px) translateZ(80px);transform:translateX(0px) translateY(-80px) translateZ(80px)}
+.cube-2-2-1{-webkit-transform:translateX(0px) translateY(0px) translateZ(-80px);-moz-transform:translateX(0px) translateY(0px) translateZ(-80px);-ms-transform:translateX(0px) translateY(0px) translateZ(-80px);-o-transform:translateX(0px) translateY(0px) translateZ(-80px);transform:translateX(0px) translateY(0px) translateZ(-80px)}
+.cube-2-2-2{-webkit-transform:translateX(0px) translateY(0px) translateZ(0px);-moz-transform:translateX(0px) translateY(0px) translateZ(0px);-ms-transform:translateX(0px) translateY(0px) translateZ(0px);-o-transform:translateX(0px) translateY(0px) translateZ(0px);transform:translateX(0px) translateY(0px) translateZ(0px)}
+.cube-2-2-3{-webkit-transform:translateX(0px) translateY(0px) translateZ(80px);-moz-transform:translateX(0px) translateY(0px) translateZ(80px);-ms-transform:translateX(0px) translateY(0px) translateZ(80px);-o-transform:translateX(0px) translateY(0px) translateZ(80px);transform:translateX(0px) translateY(0px) translateZ(80px)}
+.cube-2-3-1{-webkit-transform:translateX(0px) translateY(80px) translateZ(-80px);-moz-transform:translateX(0px) translateY(80px) translateZ(-80px);-ms-transform:translateX(0px) translateY(80px) translateZ(-80px);-o-transform:translateX(0px) translateY(80px) translateZ(-80px);transform:translateX(0px) translateY(80px) translateZ(-80px)}
+.cube-2-3-2{-webkit-transform:translateX(0px) translateY(80px) translateZ(0px);-moz-transform:translateX(0px) translateY(80px) translateZ(0px);-ms-transform:translateX(0px) translateY(80px) translateZ(0px);-o-transform:translateX(0px) translateY(80px) translateZ(0px);transform:translateX(0px) translateY(80px) translateZ(0px)}
+.cube-2-3-3{-webkit-transform:translateX(0px) translateY(80px) translateZ(80px);-moz-transform:translateX(0px) translateY(80px) translateZ(80px);-ms-transform:translateX(0px) translateY(80px) translateZ(80px);-o-transform:translateX(0px) translateY(80px) translateZ(80px);transform:translateX(0px) translateY(80px) translateZ(80px)}
+.cube-3-1-1{-webkit-transform:translateX(80px) translateY(-80px) translateZ(-80px);-moz-transform:translateX(80px) translateY(-80px) translateZ(-80px);-ms-transform:translateX(80px) translateY(-80px) translateZ(-80px);-o-transform:translateX(80px) translateY(-80px) translateZ(-80px);transform:translateX(80px) translateY(-80px) translateZ(-80px)}
+.cube-3-1-2{-webkit-transform:translateX(80px) translateY(-80px) translateZ(0px);-moz-transform:translateX(80px) translateY(-80px) translateZ(0px);-ms-transform:translateX(80px) translateY(-80px) translateZ(0px);-o-transform:translateX(80px) translateY(-80px) translateZ(0px);transform:translateX(80px) translateY(-80px) translateZ(0px)}
+.cube-3-1-3{-webkit-transform:translateX(80px) translateY(-80px) translateZ(80px);-moz-transform:translateX(80px) translateY(-80px) translateZ(80px);-ms-transform:translateX(80px) translateY(-80px) translateZ(80px);-o-transform:translateX(80px) translateY(-80px) translateZ(80px);transform:translateX(80px) translateY(-80px) translateZ(80px)}
+.cube-3-2-1{-webkit-transform:translateX(80px) translateY(0px) translateZ(-80px);-moz-transform:translateX(80px) translateY(0px) translateZ(-80px);-ms-transform:translateX(80px) translateY(0px) translateZ(-80px);-o-transform:translateX(80px) translateY(0px) translateZ(-80px);transform:translateX(80px) translateY(0px) translateZ(-80px)}
+.cube-3-2-2{-webkit-transform:translateX(80px) translateY(0px) translateZ(0px);-moz-transform:translateX(80px) translateY(0px) translateZ(0px);-ms-transform:translateX(80px) translateY(0px) translateZ(0px);-o-transform:translateX(80px) translateY(0px) translateZ(0px);transform:translateX(80px) translateY(0px) translateZ(0px)}
+.cube-3-2-3{-webkit-transform:translateX(80px) translateY(0px) translateZ(80px);-moz-transform:translateX(80px) translateY(0px) translateZ(80px);-ms-transform:translateX(80px) translateY(0px) translateZ(80px);-o-transform:translateX(80px) translateY(0px) translateZ(80px);transform:translateX(80px) translateY(0px) translateZ(80px)}
+.cube-3-3-1{-webkit-transform:translateX(80px) translateY(80px) translateZ(-80px);-moz-transform:translateX(80px) translateY(80px) translateZ(-80px);-ms-transform:translateX(80px) translateY(80px) translateZ(-80px);-o-transform:translateX(80px) translateY(80px) translateZ(-80px);transform:translateX(80px) translateY(80px) translateZ(-80px)}
+.cube-3-3-2{-webkit-transform:translateX(80px) translateY(80px) translateZ(0px);-moz-transform:translateX(80px) translateY(80px) translateZ(0px);-ms-transform:translateX(80px) translateY(80px) translateZ(0px);-o-transform:translateX(80px) translateY(80px) translateZ(0px);transform:translateX(80px) translateY(80px) translateZ(0px)}
+.cube-3-3-3{-webkit-transform:translateX(80px) translateY(80px) translateZ(80px);-moz-transform:translateX(80px) translateY(80px) translateZ(80px);-ms-transform:translateX(80px) translateY(80px) translateZ(80px);-o-transform:translateX(80px) translateY(80px) translateZ(80px);transform:translateX(80px) translateY(80px) translateZ(80px)}
+.touch-buttons{display:block}
+.game-message p{font-size:30px!important;height:30px!important;line-height:30px!important;margin-top:90px!important}
+.game-message .lower{margin-top:30px!important}
+}
+.block{display:flex;justify-content:center;align-items:center;margin:0 auto}
+.block-300{display:none;width:100%;height:250px;background-color:#8f7a66}
+.block-728{display:none;width:100%;max-width:728px;height:90px;background-color:#8f7a66}
+@media only screen and (max-width: 738px) {
+.block-300{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;margin-bottom:10px;border-radius:10px;margin-top:10px}
+.block-728{display:none}
+}
+@media only screen and (min-width: 739px) {
+.block-728{display:flex;justify-content:center;align-items:center;margin-bottom:10px;border-radius:10px;margin-top:10px}
+.block-300{display:none}
+}
+ul.unstyled.tips-and-tricks{list-style:none;padding:0;margin:30px auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:1200px}
+ul.unstyled.tips-and-tricks li{background:#e1e1e1;border-radius:10px;padding:16px;box-shadow:0 2px 6px #00000014;transition:transform .2s ease,box-shadow .2s ease;font-size:16px;line-height:1.5;color:#333}
+ul.unstyled.tips-and-tricks li:hover{transform:translateY(-4px);box-shadow:0 6px 12px #0000001f}
+@media (max-width: 600px) {
+ul.unstyled.tips-and-tricks{grid-template-columns:1fr}
+}
+@media (min-width: 601px) and (max-width: 992px) {
+ul.unstyled.tips-and-tricks{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+}
+@media (min-width: 993px) {
+ul.unstyled.tips-and-tricks{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+}
+</style>
+</head>
+<body>
+<script>
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/sw.js')
+.then(registration => {console.log('Service Worker registered successfully:', registration);})
+.catch(error => {console.log('Error in Service Worker registration:', error);});});}
+</script>
+  <div class="container">
+    <div class="heading">
+      <h1 class="title">3D 2048</h1>
+      <div class="scores-container">
+        <div class="score-container">0</div>
+        <div class="best-container">0</div>
+      </div>
+    </div>
+    <p class="game-intro">Join the numbers & get to the <strong>2048 tile!</strong></p>
+
+
+    <div class="game-container">
+      <div class="game-message">
+        <p></p>
+        <div class="lower">
+	        <a class="keep-playing-button">Keep going</a>
+          <a class="retry-button">Try again</a>
+        </div>
+      </div>
+
+      <div class="grid-container">
+        <div class="grid-inner">
+          <div class="cube cube-1-1-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-1-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-1-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-2-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-2-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-2-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-3-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-3-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-1-3-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-1-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-1-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-1-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-2-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-2-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-2-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-3-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-3-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-2-3-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-1-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-1-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-1-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-2-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-2-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-2-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-3-1">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-3-2">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="cube cube-3-3-3">
+            <div class="cube-face cube-face-u"></div>
+            <div class="cube-face cube-face-d"></div>
+            <div class="cube-face cube-face-l"></div>
+            <div class="cube-face cube-face-r"></div>
+            <div class="cube-face cube-face-f"></div>
+            <div class="cube-face cube-face-b"></div>
+          </div>
+          <div class="tile-container">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="touch-buttons">
+      <div class="button-group">
+        <div class="touch-button tap" data-type="move" data-value="4">F</div>
+        <div class="touch-button tap" data-type="move" data-value="5">B</div>
+        <div class="touch-button tap" data-type="rotate">Rotate</div>
+      </div>
+      <div class="button-group">
+        <div class="touch-button long-tap">1</div>
+        <div class="touch-button long-tap">2</div>
+        <div class="touch-button long-tap">3</div>
+      </div>
+    </div>
+
+<p class="game-explanation">
+  <strong class="important">How to play:</strong> Use the <strong>arrow keys</strong> to move tiles. Press any unused letter key to <strong>rotate</strong> the board, and hold <strong>1, 2, or 3</strong> to hide different layers. When two tiles with the same number meet, they <strong>merge into one!</strong>
+  <br><br>
+  <strong class="important">Special tiles:</strong> In this version, you’ll also find three unique tiles: <strong>4</strong>, <strong>64</strong>, and <strong>256</strong>. These tiles have special colors and can only be merged with an identical one. When merged, both tiles disappear. They’re not exactly bonuses—instead, they add extra challenge. Because the 3D version offers more tiles and more movement options, these special tiles help balance the gameplay and keep it from becoming too easy.
+</p>
+
+           <hr>
+    <div class="block block-728"><script type="text/javascript">
+     atOptions = {
+       'key' : 'd1d26e15f7c349fd8e403bb5ea491a31',
+       'format' : 'iframe',
+       'height' : 90,
+       'width' : 728,
+       'params' : {}
+     };
+   </script>
+   <script type="text/javascript" src="//www.highperformanceformat.com/d1d26e15f7c349fd8e403bb5ea491a31/invoke.js"></script></div>
+       <hr>
+    
+<ul class="unstyled tips-and-tricks" style="text-align: center;">
+<li><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-online/">2048 Online</a></li>
+<li class="even"><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/doge2048/">2048 Doge</a></li>
+<li><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-3x3/">2048 3x3</a></li>
+<li class="even"><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-5x5/">2048 5x5</a></li>
+<li><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-6x6/">2048 6x6</a></li>
+<li class="even"><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-flappy/">2048 Flappy</a></li>
+<li><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-ai/">2048 vs AI</a></li>
+<li class="even"><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-one-piece/">2048 One Piece</a></li>
+<li><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-tetris/">2048 Tetris</a></li>
+<li class="even"><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-minecraft/">2048 Minecraft</a></li>
+<li><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-mario/">2048 Mario</a></li>
+<li class="even"><a target="_blank" rel="noopener" href="https://kaloodinaz.github.io/2048-reverse/">2048 Reverse</a></li>
+</ul>
+<hr>
+    <hr>
+ <p><strong>2048 3D</strong> is an extended version of the classic <a href="https://kaloodinaz.github.io/game/2048/" target="_blank">2048 game</a>, featuring a 3x3x3 grid instead of the standard 4x4 board. This variation allows for a more strategic approach to merging tiles, making it a great option for players who enjoy longer gameplay sessions.</p>
+    <hr>
+   <p>
+      This 3 x 3 fast paced version by <a target="_blank" href="https://kaloodinaz.github.io/">Kaloo Dinaz</a> was cloned from
+      the "non-official" <a target="_blank" href="https://kaloodinaz.github.io/2048-online/">2048 game</a> authored by
+      <a target="_blank" href="https://github.com/kaloodinaz/">Kaloo Dinaz</a>.
+    </p>
+  </div>
+
+<script src="main.js?v=2.21"></script>
+<script src="https://cdn.counter.dev/script.js" data-id="74211804-62e3-41a8-9f09-2f1eac9640fb" data-utcoffset="2"></script>
+</body>
+</html>
